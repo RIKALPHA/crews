@@ -50,12 +50,14 @@ class SendRobot extends Command
         $crew = $this->crewRepository->find($crewId);
 
         if ($crew === null) {
+            $output->writeln("Crew with that id doesn't exist");
             return Command::FAILURE;
         }
 
         $robots = $crew->getRobots();
 
         if (count($robots) === 0) {
+            $output->writeln("Crew has no robots");
             return Command::FAILURE;
         }
 
