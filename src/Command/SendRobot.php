@@ -7,12 +7,15 @@ use App\Repository\CrewRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-//demo:6
-//
+//demo:crew 2 planet id 6
+// php bin/console app:send -c 2 -p 6
 
 #[AsCommand(
     name: "app:send"
@@ -24,22 +27,28 @@ class SendRobot extends Command
 
     public function __construct(
         private readonly MessageBusInterface $messageBus,
-        string $name = null,
         EntityManagerInterface $entityManager,
         CrewRepository $crewRepository
     )
     {
-        parent::__construct($name);
+        parent::__construct();
         $this->entityManager = $entityManager;
         $this->crewRepository = $crewRepository;
     }
 
+    protected function configure(): void
+    {
+        $this->addArgument('crewId', InputArgument::REQUIRED, 'Crew Id');
+        $this->addArgument('planetId', InputArgument::REQUIRED, 'Planet Id');
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $crewId = 'CrewId: ' . $input->getArgument('crewId');
-        $planetId = 'PlanetId: ' . $input->getArgument('planetId');
+        $crewId = $input->getArgument('crewId');
+        $planetId = $input->getArgument('planetId');
 
         $crew = $this->crewRepository->find($crewId);
+
         if ($crew === null) {
             return Command::FAILURE;
         }
@@ -57,7 +66,6 @@ class SendRobot extends Command
 
         $this->entityManager->persist($crew);
         $this->entityManager->flush();
-
 
         $this->messageBus->dispatch(
             message: new RobotTransmission($planetId)
