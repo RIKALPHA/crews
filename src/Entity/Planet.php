@@ -19,9 +19,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Planet
 {
     public const STATUS_TODO = "TODO";
+    public const STATUS_ENR = "En route";
     public const STATUS_OK = "OK";
     public const STATUS_NOK = "NOK";
-    public const STATUS_ENR = "En route";
 
     public const CORRELATION = [
         0 => self::STATUS_TODO,

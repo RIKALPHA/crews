@@ -17,6 +17,7 @@ framework:
         routing:
             # Route your messages to the transports
             'App\Message\RobotTransmission': async
+            'App\Message\PlanetUpdate': async
 
 # when@test:
 #    framework:
