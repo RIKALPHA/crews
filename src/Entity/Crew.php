@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Controller\AddCrewActionController;
 use App\Controller\GetCrewActionController;
+use App\Controller\UpdatePlanetController;
 use App\Repository\CrewRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
